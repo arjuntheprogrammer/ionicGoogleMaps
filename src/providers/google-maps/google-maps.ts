@@ -51,11 +51,12 @@ export class GoogleMapsProvider {
 
           let script = document.createElement("script");
           script.id = "googleMaps";
+          this.apiKey = "AIzaSyCNy3fNswCBZ2gX162iYCwPQ8kFkQxqmNI";
 
           if(this.apiKey){
-            script.src = 'http://maps.google.com/maps/api/js?key=' + this.apiKey + '&callback=mapInit';
+            script.src = 'http://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&callback=mapInit';
           } else {
-            script.src = 'http://maps.google.com/maps/api/js?callback=mapInit';
+            script.src = 'http://maps.googleapis.com/maps/api/js?callback=mapInit';
           }
 
           document.body.appendChild(script);
@@ -89,9 +90,8 @@ export class GoogleMapsProvider {
       Geolocation.getCurrentPosition().then((position) => {
 
         // UNCOMMENT FOR NORMAL USE
-        //let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-        let latLng = new google.maps.LatLng(40.713744, -74.009056);
+        let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        //let latLng = new google.maps.LatLng(40.713744, -74.009056);
 
         let mapOptions = {
           center: latLng,
@@ -100,6 +100,9 @@ export class GoogleMapsProvider {
         }
 
         this.map = new google.maps.Map(this.mapElement, mapOptions);
+
+        this.addMarker(position.coords.latitude, position.coords.longitude);
+
         resolve(true);
 
       });
@@ -164,7 +167,8 @@ export class GoogleMapsProvider {
     let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: latLng
+      position: latLng,
+      title: 'You are here',
     });
 
     this.markers.push(marker);
