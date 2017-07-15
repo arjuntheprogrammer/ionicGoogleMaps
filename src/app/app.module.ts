@@ -7,16 +7,23 @@ import { ListPage } from '../pages/list/list';
 import { LocationsProvider } from '../providers/locations/locations';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { ConnectivityProvider } from '../providers/connectivity/connectivity';
+import { BrowserModule } from '@angular/platform-browser';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import {HttpModule } from '@angular/http';
+
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     MapPage,
-    ListPage
+    ListPage,
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    HttpModule,
+    IonicModule.forRoot(MyApp),
+    BrowserModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -25,6 +32,6 @@ import { ConnectivityProvider } from '../providers/connectivity/connectivity';
     MapPage,
     ListPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, LocationsProvider, GoogleMapsProvider, ConnectivityProvider]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, LocationsProvider, GoogleMapsProvider, ConnectivityProvider, StatusBar,SplashScreen]
 })
 export class AppModule {}
