@@ -15,6 +15,9 @@ export class GoogleMapsProvider {
   mapLoadedObserver: any;
   markers: any = [];
   apiKey: string;
+  directions: any = [];
+  distance: string;
+  duration: string;
 
   constructor(public connectivityService: ConnectivityProvider) {
 
@@ -33,12 +36,12 @@ export class GoogleMapsProvider {
 
     return new Promise((resolve) => {
 
-      if(typeof google == "undefined" || typeof google.maps == "undefined"){
+      if (typeof google == "undefined" || typeof google.maps == "undefined") {
 
         console.log("Google maps JavaScript needs to be loaded.");
         this.disableMap();
 
-        if(this.connectivityService.isOnline()){
+        if (this.connectivityService.isOnline()) {
 
           window['mapInit'] = () => {
 
@@ -53,7 +56,7 @@ export class GoogleMapsProvider {
           script.id = "googleMaps";
           this.apiKey = "AIzaSyCNy3fNswCBZ2gX162iYCwPQ8kFkQxqmNI";
 
-          if(this.apiKey){
+          if (this.apiKey) {
             script.src = 'http://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&callback=mapInit';
           } else {
             script.src = 'http://maps.googleapis.com/maps/api/js?callback=mapInit';
@@ -65,7 +68,7 @@ export class GoogleMapsProvider {
       }
       else {
 
-        if(this.connectivityService.isOnline()){
+        if (this.connectivityService.isOnline()) {
           this.initMap();
           this.enableMap();
         }
@@ -101,7 +104,8 @@ export class GoogleMapsProvider {
 
         this.map = new google.maps.Map(this.mapElement, mapOptions);
 
-        this.addMarker(position.coords.latitude, position.coords.longitude);
+        // this.addMarker(position.coords.latitude, position.coords.longitude);
+        this.calculateAndDisplayRoute();
 
         resolve(true);
 
@@ -113,7 +117,7 @@ export class GoogleMapsProvider {
 
   disableMap(): void {
 
-    if(this.pleaseConnect){
+    if (this.pleaseConnect) {
       this.pleaseConnect.style.display = "block";
     }
 
@@ -121,43 +125,31 @@ export class GoogleMapsProvider {
 
   enableMap(): void {
 
-    if(this.pleaseConnect){
+    if (this.pleaseConnect) {
       this.pleaseConnect.style.display = "none";
     }
 
   }
 
   addConnectivityListeners(): void {
-
     document.addEventListener('online', () => {
-
       console.log("online");
-
       setTimeout(() => {
-
-        if(typeof google == "undefined" || typeof google.maps == "undefined"){
+        if (typeof google == "undefined" || typeof google.maps == "undefined") {
           this.loadGoogleMaps();
         }
         else {
-          if(!this.mapInitialised){
+          if (!this.mapInitialised) {
             this.initMap();
           }
-
           this.enableMap();
         }
-
       }, 2000);
-
     }, false);
-
     document.addEventListener('offline', () => {
-
       console.log("offline");
-
       this.disableMap();
-
     }, false);
-
   }
 
   addMarker(lat: number, lng: number): void {
@@ -173,6 +165,38 @@ export class GoogleMapsProvider {
 
     this.markers.push(marker);
 
+  }
+
+  calculateAndDisplayRoute() {
+    let directionsService = new google.maps.DirectionsService;
+    let directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsDisplay.setMap(this.map);
+    let myLatLng = {
+      lat: 28.589371,
+      lng: 77.314101
+    };
+    let destLatLng = {
+      lat: 28.627991,
+      lng: 77.373666
+    }
+    directionsService.route({
+      origin: myLatLng,
+      destination: destLatLng,
+      // origin: document.getElementById('start').value,
+      // destination: document.getElementById('end').value,
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      // console.log("response", response);
+      this.directions = response.routes[0].legs[0].steps; //instructions
+      this.duration = response.routes[0].legs[0].duration.text;
+      this.distance = response.routes[0].legs[0].distance.text;
+      console.log(this.directions, this.duration, this.distance);
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
   }
 
 }

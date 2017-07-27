@@ -13,17 +13,17 @@ export class MapPage {
   @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
 
   constructor(public navCtrl: NavController, public maps: GoogleMapsProvider, public platform: Platform, public locations: LocationsProvider) {
-
-  }
-
-  ionViewDidLoad(){
-
     this.platform.ready().then(() => {
 
         let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
 
     });
-
   }
+
+  // ionViewDidLoad(){
+  //
+  //
+  //
+  // }
 
 }
