@@ -4,7 +4,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { MapPage } from '../pages/map/map';
 import { ListPage } from '../pages/list/list';
-import { LocationsProvider } from '../providers/locations/locations';
+import { Locations } from '../providers/locations/locations';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { ConnectivityProvider } from '../providers/connectivity/connectivity';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,6 +32,6 @@ import {HttpModule } from '@angular/http';
     MapPage,
     ListPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, LocationsProvider, GoogleMapsProvider, ConnectivityProvider, StatusBar,SplashScreen]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, Locations, GoogleMapsProvider, ConnectivityProvider, StatusBar,SplashScreen]
 })
 export class AppModule {}
