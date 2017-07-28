@@ -9,21 +9,13 @@
 
 <ion-content>
 
-    <ion-list >
+    <ion-list no-lines>
         <ion-item *ngFor="let location of locations.data">
             <ion-avatar item-left>
                 <ion-icon name="pin"></ion-icon>
             </ion-avatar>
             <h2>{{location.title}}</h2>
             <p>{{location.distance}} miles</p>
-        </ion-item>
-        <ion-item *ngFor="let item of directions">
-            <ion-avatar item-left>
-                <ion-icon name="pin"></ion-icon>
-            </ion-avatar>
-            <h2>{{item.instructions}}</h2>
-            <p>{{item.distance.text}}</p>
-            <p>{{item.duration.text}}</p>
         </ion-item>
     </ion-list>
 

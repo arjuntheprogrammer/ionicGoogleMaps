@@ -22,7 +22,6 @@ export class MapPage {
 
       let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
       let locationsLoaded = this.locations.load();
-
       Promise.all([
         mapLoaded,
         locationsLoaded
@@ -31,10 +30,9 @@ export class MapPage {
         let locations = result[1];
 
         for (let location of locations) {
-          console.log("locs", location)
           this.maps.addMarker(location.latitude, location.longitude);
         }
-
+         console.log("directions=",result[0] )
       });
 
     });
