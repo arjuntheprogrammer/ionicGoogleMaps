@@ -32,7 +32,7 @@ export class MapPage {
         for (let location of locations) {
           this.maps.addMarker(location.latitude, location.longitude);
         }
-         console.log("directions=",result[0] )
+         console.log("directions=",result[0]["directions"] )
       });
 
     });

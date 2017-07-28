@@ -23,7 +23,6 @@ export class GoogleMapsProvider {
 
   }
 
-
   init(mapElement: any, pleaseConnect: any): Promise<any> {
 
     this.mapElement = mapElement;
@@ -46,8 +45,8 @@ export class GoogleMapsProvider {
 
           window['mapInit'] = () => {
 
-            this.initMap().then((directions) => {
-              resolve(directions);
+            this.initMap().then((values) => {
+              resolve(values);
             });
 
             this.enableMap();
@@ -102,10 +101,13 @@ export class GoogleMapsProvider {
       this.map = new google.maps.Map(this.mapElement, mapOptions);
 
       // this.addMarker(position.coords.latitude, position.coords.longitude);
-      this.calculateAndDisplayRoute().then((directions) => {
-        this.directions = directions;
-        console.log("dir=", directions);
-        resolve(directions);
+      this.calculateAndDisplayRoute().then((values) => {
+        this.directions = values["directions"];
+        this.duration = values["duration"];
+        this.distance = values["distance"];
+
+        console.log("dir=", values["directions"], values["distance"], values["duration"]);
+        resolve(values);
       });
 
 
@@ -202,7 +204,7 @@ export class GoogleMapsProvider {
         console.log(this.directions, this.duration, this.distance);
         if (status === 'OK') {
           directionsDisplay.setDirections(response);
-          resolve(response.routes[0].legs[0].steps);
+          resolve({"directions": response.routes[0].legs[0].steps,"duration": response.routes[0].legs[0].duration.text,"distance": response.routes[0].legs[0].distance.text});
         } else {
           window.alert('Directions request failed due to ' + status);
           resolve(false);

@@ -23,7 +23,7 @@ import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 
    ionViewDidLoad() {
      console.log('Hello ListPage Page');
-
+     console.log(this.maps.directions);
    }
 
  }
